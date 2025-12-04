@@ -55,7 +55,7 @@ input {
     margin-right: 10px;
 }
 
-button {
+.main-content-container button {
     height: 44px;
     font-size: 22px;
     border-radius: 6px;

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import "../css/mainContentContainer.css";
 import { Button, Alert } from 'reactstrap';
 
-interface Props {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   range: string;
 }
 
@@ -49,14 +49,14 @@ class MainContentContainer extends Component<Props, State> {
     };
   };
 
-  getSnapshotBeforeUpdate(prevProps: Props) {
-    if (this.props.range !== prevProps.range) {
+  getSnapshotBeforeUpdate(_prevProps: Props) {
+    if (this.props.range !== _prevProps.range) {
       return this.getNewQuestion(this.props);
     }
     return null;
   }
 
-  componentDidUpdate(prevProps: Props, prevState: State, snapshot: State | null) {
+  componentDidUpdate(_prevProps: Props, _prevState: State, snapshot: State | null) {
     if (snapshot) {
       this.setState({
         num1: snapshot.num1,
@@ -78,7 +78,7 @@ class MainContentContainer extends Component<Props, State> {
   checkBtnOnClickHandler = () => {
     const userInput = parseInt(this.state.userInput);
     const result = this.state.num1 + this.state.num2;
-    const inputText = document.getElementById("userInput") as HTMLInputElement | null;
+    const inputEl = this.inputRef.current;
     this.setState((prevState) => ({
       ...this.getNewQuestion(this.props),
       totalCounter: prevState.totalCounter + 1,
@@ -97,9 +97,9 @@ class MainContentContainer extends Component<Props, State> {
         alertVisible: true,
         alertText: "Wrong!"
       }));
-      if (inputText) inputText.select();
+      if (inputEl) inputEl.select();
     }
-    if (inputText) inputText.focus();
+    if (inputEl) inputEl.focus();
   };
 
   showAlert = () => {
@@ -112,7 +112,7 @@ class MainContentContainer extends Component<Props, State> {
 
   render() {
     return (
-      <div className="main-content-container">
+      <div className={this.props.className || "main-content-container"}>
         <div className="main-content-header">
           {this.props.range === ""
             ? (
@@ -134,7 +134,6 @@ class MainContentContainer extends Component<Props, State> {
                     ref={this.inputRef}
                     id="userInput"
                     onKeyPress={this.enterPressed}
-                    border="0"
                     type="number"
                     value={this.state.userInput}
                     onChange={this.inputOnChangeHandler}

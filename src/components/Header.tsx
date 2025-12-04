@@ -1,6 +1,5 @@
 import React from 'react'
 import '../css/masterContainer.css'
-import '../css/masterContainer.css'
 
 const Header: React.FC<{ text: string }> = (props) => {
     return (
