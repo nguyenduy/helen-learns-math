@@ -18,6 +18,8 @@ interface State {
 }
 
 class MainContentContainer extends Component<Props, State> {
+  inputRef = React.createRef<HTMLInputElement>();
+
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -61,6 +63,9 @@ class MainContentContainer extends Component<Props, State> {
         num2: snapshot.num2,
         userInput: snapshot.userInput
       });
+      if (this.inputRef.current) {
+        this.inputRef.current.focus();
+      }
     }
   }
 
@@ -123,23 +128,26 @@ class MainContentContainer extends Component<Props, State> {
             <div className="main-content-content">
               <div className="question">
                 <div>Question {this.state.totalCounter}:</div>
-                <span>{this.state.num1} + {this.state.num2} = </span>
-                <input
-                  id="userInput"
-                  onKeyPress={this.enterPressed}
-                  border="0"
-                  type="number"
-                  value={this.state.userInput}
-                  onChange={this.inputOnChangeHandler}
-                />
-                <Button
-                  id="checkBtn"
-                  color="primary"
-                  size="lg"
-                  onClick={this.checkBtnOnClickHandler}
-                >
-                  Check
-                </Button>
+                <div className="question-row">
+                  <span>{this.state.num1} + {this.state.num2} = </span>
+                  <input
+                    ref={this.inputRef}
+                    id="userInput"
+                    onKeyPress={this.enterPressed}
+                    border="0"
+                    type="number"
+                    value={this.state.userInput}
+                    onChange={this.inputOnChangeHandler}
+                  />
+                  <Button
+                    id="checkBtn"
+                    color="primary"
+                    size="lg"
+                    onClick={this.checkBtnOnClickHandler}
+                  >
+                    Check
+                  </Button>
+                </div>
               </div>
               <div className="correct-answer-counter">
                 Correct answers: {this.state.correctCounter}

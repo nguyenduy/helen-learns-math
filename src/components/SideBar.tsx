@@ -18,7 +18,7 @@ class SideBar extends React.Component<SideBarProps> {
       <div className={this.props.className || "side-bar"}>
         <div className="sidebar-header">{this.props.header}</div>
         <hr />
-        {this.props.items.map(({ text, color }) => (
+        {this.props.items.map(({ text, color }, idx) => (
           <Button
             key={text}
             value={text}
@@ -26,6 +26,7 @@ class SideBar extends React.Component<SideBarProps> {
             color={color}
             size="lg"
             onClick={this.clickHandler}
+            className={`sidebar-btn${idx + 1}`}
           >
             {text}
           </Button>
