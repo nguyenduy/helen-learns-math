@@ -1,0 +1,14 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: #fffafc;
+  font-family: 'Gloria Hallelujah', 'Architects Daughter', 'Sacramento', cursive, sans-serif;
+  min-height: 100vh;
+}
+
+.App {
+  min-height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+  background: #fffafc;
+}

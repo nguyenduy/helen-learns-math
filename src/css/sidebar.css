@@ -1,23 +1,59 @@
 .side-bar {
     width: 200px;
-    height: auto;
     margin-top: 10px;
     color: brown;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    background: #f8f8fa;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 4px 0; /* reduced vertical padding */
+    max-height: 100vh;
+    overflow-y: auto;
 }
 
 .sidebar-header {
-    font-size: 40px;
+    font-size: clamp(18px, 5vw, 32px);
     font-weight: bold;
-    color: darkmagenta;
+    color: #6c2184;
     text-align: center;
-    border-radius: 30px;
-    background-color: silver;
-    font-family: 'Gloria Hallelujah', cursive;;
+    border-radius: 40px;
+    background-color: #d3d3d3;
+    font-family: 'Gloria Hallelujah', cursive;
+    margin-bottom: 10px;
+    padding: 18px 32px;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    white-space: normal;
 }
 
-Button {
+.side-bar .btn {
+    width: 170px;
+    min-height: 44px;
+    margin-bottom: 4px; /* tightened spacing between buttons */
+    border-radius: 10px;
+    /* keep variant text color (don't force white) */
+    font-size: 20px;
     font-family: 'Architects Daughter', cursive;
+    font-weight: 400;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    transition: filter 0.2s;
+    padding: 6px 10px; /* slightly larger horizontal padding, slightly more compact vertically */
+    white-space: normal;
+    word-break: break-word;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Button colors come from Bootstrap variant classes (e.g. .btn-primary) */
+
+.side-bar .btn:hover {
+    filter: brightness(0.92);
+    cursor: pointer;
 }
 
 hr {
