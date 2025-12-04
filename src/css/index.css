@@ -1,14 +1,26 @@
+html, body, #root {
+  height: 100%;
+}
+
+* { box-sizing: border-box; }
+
 body {
   margin: 0;
   padding: 0;
   background: #fffafc;
   font-family: 'Gloria Hallelujah', 'Architects Daughter', 'Sacramento', cursive, sans-serif;
-  min-height: 100vh;
 }
 
+/* Prevent any accidental horizontal scrolling */
+html, body { overflow-x: hidden; }
+
 .App {
-  min-height: 100vh;
-  width: 100vw;
-  box-sizing: border-box;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   background: #fffafc;
+  overflow: hidden; /* prevent page-level scroll */
 }
+
+.App, .master-container { max-width: 100%; overflow-x: hidden; }

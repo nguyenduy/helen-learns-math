@@ -1,11 +1,18 @@
-body {
-    margin: 10px;
-}
 
 .master-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     max-width: 100%;
+}
+
+.header-wrapper {
+    padding: 10px;
+}
+
+.master-container > .header {
     margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .header {
@@ -15,6 +22,8 @@ body {
     font-weight: bold;
     height: 100px;
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     display: table;
     font-family: 'Gloria Hallelujah', cursive;
 }

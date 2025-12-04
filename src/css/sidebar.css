@@ -1,46 +1,69 @@
 .side-bar {
-    width: 200px;
-    margin-top: 10px;
+    width: 180px;
+    margin-top: 6px;
     color: brown;
     display: flex;
     flex-direction: column;
     background: #f8f8fa;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    padding: 4px 0; /* reduced vertical padding */
+    padding: 2px 0; /* reduced vertical padding */
     max-height: 100vh;
-    overflow-y: auto;
+    overflow: hidden; /* prevent internal scrolling; content must fit */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }
+.side-bar, .side-bar * { box-sizing: border-box; }
+
+.side-bar::-webkit-scrollbar { display: none; }
 
 .sidebar-header {
-    font-size: clamp(18px, 5vw, 32px);
+    font-size: clamp(15px, 4.2vw, 24px);
     font-weight: bold;
     color: #6c2184;
     text-align: center;
     border-radius: 40px;
     background-color: #d3d3d3;
     font-family: 'Gloria Hallelujah', cursive;
-    margin-bottom: 10px;
-    padding: 18px 32px;
+    margin-bottom: 8px;
+    padding: 10px 16px;
     display: block;
     width: 100%;
     box-sizing: border-box;
     overflow: hidden;
     white-space: normal;
+    position: relative;
+}
+
+.sidebar-toggle {
+    display: none; /* shown only on small screens */
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    background: transparent;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+}
+
+.sidebar-title {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
 }
 
 .side-bar .btn {
-    width: 170px;
-    min-height: 44px;
-    margin-bottom: 4px; /* tightened spacing between buttons */
-    border-radius: 10px;
+    width: 95%;
+    min-height: 36px;
+    margin-bottom: 6px; /* tightened spacing between buttons */
+    border-radius: 8px;
     /* keep variant text color (don't force white) */
-    font-size: 20px;
+    font-size: 16px;
     font-family: 'Architects Daughter', cursive;
     font-weight: 400;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-    transition: filter 0.2s;
-    padding: 6px 10px; /* slightly larger horizontal padding, slightly more compact vertically */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: filter 0.12s;
+    padding: 6px 6px;
     white-space: normal;
     word-break: break-word;
     display: flex;
@@ -56,6 +79,172 @@
     cursor: pointer;
 }
 
+.side-bar .sidebar-body {
+    transition: max-height 0.25s ease, opacity 0.25s ease;
+    max-height: 2000px;
+    opacity: 1;
+}
+.side-bar .sidebar-body { padding: 0 8px; width:100%; }
+.side-bar .sidebar-body.hidden {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+}
+.side-bar.collapsed {
+    width: 60px; /* collapsed narrow bar */
+}
+.side-bar.collapsed .sidebar-title {
+    display: none;
+}
+.side-bar.collapsed .sidebar-toggle {
+    left: 10px;
+}
+
 hr {
     margin: 5px;
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 720px) {
+    .side-bar {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 8px;
+        border-radius: 6px;
+        /* allow side-bar to expand naturally on small screens (no inner scrollbar) */
+        max-height: none;
+        overflow: visible;
+    }
+    .side-bar .btn {
+        width: calc(50% - 12px);
+        min-height: 36px;
+        margin: 6px;
+        font-size: 16px;
+        padding: 6px 8px;
+    }
+    .sidebar-header {
+        width: 100%;
+        margin-bottom: 6px;
+        padding: 0 10px; /* make header a compact pill */
+        height: 48px;
+        font-size: clamp(14px, 4.8vw, 20px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #e9e9ec;
+        border-radius: 999px;
+    }
+}
+
+/* Show toggle on small screens */
+@media (max-width: 720px) {
+    .sidebar-toggle { display: inline-block; }
+    .side-bar.collapsed { width: 100%; }
+}
+
+/* When compact on small screens, show the title (don't hide it) */
+@media (max-width: 720px) {
+    .side-bar.collapsed .sidebar-title { display: inline-block; }
+    .side-bar.collapsed .sidebar-toggle { left: 12px; top: 50%; transform: translateY(-50%); }
+    /* Hide the thin rule to avoid a floating empty bar look */
+    .side-bar hr { display: none; }
+}
+
+/* Overlay / drawer styles */
+.sidebar-overlay-button {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(2px);
+    border: none;
+    padding: 0;
+    margin: 0;
+    z-index: 1200;
+    transition: opacity 180ms ease;
+    opacity: 1;
+}
+
+.sidebar-drawer {
+    position: fixed;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 260px;
+    max-width: 86%;
+    background: linear-gradient(180deg, #ffffff 0%, #fbfbfd 100%);
+    border-radius: 12px;
+    box-shadow: 8px 12px 30px rgba(28,30,36,0.15);
+    z-index: 1201;
+    display: flex;
+    flex-direction: column;
+    padding: 14px;
+    transform: translateX(0);
+    transition: transform 240ms cubic-bezier(.2,.9,.2,1), opacity 180ms ease;
+}
+
+.drawer-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 18px 8px 10px 8px; /* leave room for absolute close button */
+    border-bottom: 1px solid #f0f0f3;
+    position: relative;
+}
+
+/* Close button inside drawer should be part of the header flow (not absolutely positioned) */
+
+.drawer-header .sidebar-toggle {
+    position: absolute; /* pin to top-left */
+    left: 10px;
+    top: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    background: transparent;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 8px;
+    color: #444;
+}
+
+/* When drawer is used on small screens, ensure the inline body is hidden */
+@media (max-width: 720px) {
+    .side-bar .sidebar-body.hidden { display: none; }
+    .drawer-header { align-items: flex-start; }
+    .drawer-header .sidebar-toggle { margin-top: 2px; }
+}
+
+.drawer-header .sidebar-title {
+    width: auto; /* override global 100% width */
+    flex: 1 1 auto;
+    text-align: center;
+}
+
+.drawer-body {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    padding-right: 6px;
+    -ms-overflow-style: none; /* hide scrollbar IE/Edge */
+    scrollbar-width: none; /* hide scrollbar Firefox */
+}
+
+.drawer-body::-webkit-scrollbar { display: none; }
+
+/* Make sure drawer buttons use full width */
+.sidebar-drawer .btn {
+    width: 100%;
+}
+
+/* Slightly reduce button font on small screens inside drawer */
+@media (max-width: 420px) {
+    .sidebar-drawer { width: 92%; left: 4%; }
+    .sidebar-drawer .btn { font-size: 18px; padding: 10px 12px; }
 }

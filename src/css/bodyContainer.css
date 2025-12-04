@@ -1,9 +1,29 @@
 .body-container {
     display: flex;
+    flex: 1 1 auto;
+    min-height: 0; /* allow children to shrink for internal scrolling */
 }
 
 .main-container {
     width: 100%;
-    height: auto;
+    height: 100%;
     border-radius: 10px;
+    overflow: hidden; /* contain inner scroll */
+}
+
+/* Responsive: on small screens stack sidebar above content */
+@media (max-width: 720px) {
+    .body-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .side-bar {
+        width: 100%;
+        order: 0;
+    }
+    .main-container {
+        order: 1;
+        width: 100%;
+        height: auto;
+    }
 }
