@@ -1,5 +1,5 @@
 .side-bar {
-    width: 180px;
+    width: 240px;
     margin-top: 6px;
     color: brown;
     display: flex;
@@ -83,8 +83,14 @@
     transition: max-height 0.25s ease, opacity 0.25s ease;
     max-height: 2000px;
     opacity: 1;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
 }
-.side-bar .sidebar-body { padding: 0 8px; width:100%; }
+.side-bar .sidebar-body { padding: 8px; width:100%; }
 .side-bar .sidebar-body.hidden {
     max-height: 0;
     opacity: 0;
@@ -240,11 +246,93 @@ hr {
 
 /* Make sure drawer buttons use full width */
 .sidebar-drawer .btn {
-    width: 100%;
+                width: calc(100% - 16px);
 }
 
 /* Slightly reduce button font on small screens inside drawer */
 @media (max-width: 420px) {
     .sidebar-drawer { width: 92%; left: 4%; }
     .sidebar-drawer .btn { font-size: 18px; padding: 10px 12px; }
+}
+
+    /* Operation dropdown styling (header + drawer) */
+    .sidebar-title select,
+    .drawer-header .sidebar-title select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        width: 100%;
+        max-width: 100%;
+        margin: 6px auto 0;
+        display: block;
+        background: #ffffff;
+.side-bar button.ant-btn,
+.side-bar .ant-btn {
+    flex: 1 1 calc(50% - 12px);
+    min-width: 110px;
+    max-width: 220px;
+    box-sizing: border-box;
+}
+.side-bar .ant-btn + .ant-btn {
+    margin-left: 0;
+}
+        border: 2px solid #e3e3e3;
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-family: 'Architects Daughter', cursive;
+        font-size: clamp(13px, 2.4vw, 16px);
+        line-height: 1.1;
+        color: #222;
+        text-align: center;
+        -webkit-text-align-last: center;
+        text-align-last: center;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: clip;
+        /* custom caret on the right (small blue) */
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%232b66d9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-origin: content-box;
+        /* ensure padding reserves room for caret */
+        padding-right: 40px;
+        box-sizing: border-box;
+    }
+
+    .sidebar-title select option,
+    .drawer-header .sidebar-title select option {
+        font-family: 'Architects Daughter', cursive;
+        font-size: 16px;
+    }
+
+    /* Slight adjustments for small screens */
+    @media (max-width: 720px) {
+        .sidebar-title select,
+        .drawer-header .sidebar-title select {
+            width: calc(100% - 20px);
+            font-size: clamp(13px, 3vw, 16px);
+            padding: 8px 12px 8px 12px;
+            border-radius: 12px;
+            box-sizing: border-box;
+        }
+    }
+
+/* Ant Design Select adjustments to avoid truncating the selected label */
+.side-bar .sidebar-title .ant-select-selector,
+.side-bar .drawer-header .sidebar-title .ant-select-selector {
+    min-width: 180px;
+    max-width: 320px;
+    padding-right: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.side-bar .sidebar-title .ant-select-selection-item,
+.side-bar .drawer-header .sidebar-title .ant-select-selection-item {
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
 }

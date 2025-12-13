@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import "../css/mainContentContainer.css";
-import { Button, Alert } from 'reactstrap';
+import { Button, Alert } from 'antd';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   range: string;
+  operation?: string;
 }
 
 interface State {
@@ -41,7 +42,23 @@ class MainContentContainer extends Component<Props, State> {
   getNewQuestion = (props: Props) => {
     const range = parseInt(props.range.slice(-3).trim());
     const num1 = Math.floor(Math.random() * range);
-    const num2 = Math.floor(Math.random() * (range - num1));
+    let num2 = Math.floor(Math.random() * range);
+    if (props.operation === 'Addition') {
+      // keep both small for addition
+      num2 = Math.floor(Math.random() * (range - num1));
+    } else if (props.operation === 'Subtraction') {
+      // ensure num1 >= num2 for subtraction to avoid negative results
+      if (num2 > num1) {
+        const tmp = num1;
+        num2 = tmp;
+      }
+      // simpler approach: make num1 larger
+      if (num1 < num2) {
+        // swap
+        const a = num1;
+        num2 = a;
+      }
+    }
     return {
       num1,
       num2,
@@ -77,7 +94,7 @@ class MainContentContainer extends Component<Props, State> {
 
   checkBtnOnClickHandler = () => {
     const userInput = parseInt(this.state.userInput);
-    const result = this.state.num1 + this.state.num2;
+    const result = this.props.operation === 'Subtraction' ? this.state.num1 - this.state.num2 : this.state.num1 + this.state.num2;
     const inputEl = this.inputRef.current;
     this.setState((prevState) => ({
       ...this.getNewQuestion(this.props),
@@ -118,7 +135,7 @@ class MainContentContainer extends Component<Props, State> {
             ? (
               <div>
                 <div>Hello Helen, are you ready to learn math?</div>
-                <div>Click a category on the left to start! </div>
+                <div>Click a category to start! </div>
               </div>
             )
             : this.props.range}
@@ -129,7 +146,7 @@ class MainContentContainer extends Component<Props, State> {
               <div className="question">
                 <div>Question {this.state.totalCounter}:</div>
                 <div className="question-row">
-                  <span>{this.state.num1} + {this.state.num2} = </span>
+                  <span>{this.state.num1} {this.props.operation === 'Subtraction' ? '-' : '+'} {this.state.num2} = </span>
                   <input
                     ref={this.inputRef}
                     id="userInput"
@@ -138,12 +155,7 @@ class MainContentContainer extends Component<Props, State> {
                     value={this.state.userInput}
                     onChange={this.inputOnChangeHandler}
                   />
-                  <Button
-                    id="checkBtn"
-                    color="primary"
-                    size="lg"
-                    onClick={this.checkBtnOnClickHandler}
-                  >
+                  <Button type="primary" size="large" onClick={this.checkBtnOnClickHandler}>
                     Check
                   </Button>
                 </div>
@@ -151,7 +163,7 @@ class MainContentContainer extends Component<Props, State> {
               <div className="correct-answer-counter">
                 Correct answers: {this.state.correctCounter}
               </div>
-              <Alert color={this.state.alertType} isOpen={this.state.alertVisible}>
+              <Alert type={this.state.alertType === 'success' ? 'success' : 'error'} banner={false} showIcon={false} closable={false}>
                 {this.state.alertText}
               </Alert>
             </div>

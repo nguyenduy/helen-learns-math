@@ -1,10 +1,28 @@
 import React from 'react'
 import '../css/sidebar.css'
-import { Button } from 'reactstrap';
+import { Button, Select } from 'antd';
+const { Option } = Select;
+
+const colorMap: Record<string, string> = {
+  success: '#28a745',
+  primary: '#007bff',
+  warning: '#f0ad4e',
+  info: '#17a2b8',
+  danger: '#dc3545',
+  secondary: '#6c757d'
+};
+
+function getTextColor(variant: string) {
+  if (variant === 'warning') return '#222';
+  if (variant === 'info') return '#fff';
+  return '#fff';
+}
 
 interface SideBarProps {
   className?: string;
   header: string;
+  operation?: string;
+  onOperationChange?: (op: string) => void;
   items: { text: string; color: string }[];
   chooseRange: (range: string) => void;
 }
@@ -85,18 +103,39 @@ class SideBar extends React.Component<SideBarProps, { compact: boolean; drawerOp
       <div className={wrapperClass}>
         <div className="sidebar-header">
           <button type="button" className="sidebar-toggle" onClick={this.toggleCollapsed} aria-label="Toggle sidebar">☰</button>
-          <span className="sidebar-title">{this.props.header}</span>
+          <div className="sidebar-title">
+            <Select
+              id="operation-select"
+              value={this.props.operation || this.props.header}
+              onChange={(val) => this.props.onOperationChange?.(val)}
+              aria-label="Select operation"
+              bordered={false}
+              size="large"
+              dropdownMatchSelectWidth={false}
+              dropdownStyle={{ minWidth: 200 }}
+              style={{ width: '100%', paddingRight: 36, textAlign: 'center' }}
+              optionLabelProp="children"
+            >
+              <Option value="Addition">Addition</Option>
+              <Option value="Subtraction">Subtraction</Option>
+            </Select>
+          </div>
         </div>
         <hr />
         <div className={`sidebar-body ${this.state.compact ? 'hidden' : ''}`}>
           {this.props.items.map(({ text, color }) => (
             <Button
               key={text}
-              value={text}
-              block
-              color={color}
-              size="lg"
-              onClick={(e) => { this.clickHandler(e); this.close(); }}
+              onClick={(e) => { this.props.chooseRange(text); this.close(); }}
+              type="default"
+              size="large"
+              style={{
+                width: '95%',
+                marginBottom: 8,
+                background: colorMap[color] || '#eee',
+                color: getTextColor(color),
+                border: 'none'
+              }}
             >
               {text}
             </Button>
@@ -114,20 +153,40 @@ class SideBar extends React.Component<SideBarProps, { compact: boolean; drawerOp
             ></button>
 
             <aside className="sidebar-drawer" ref={this.drawerRef} aria-modal="true" role="dialog">
-              <div className="drawer-header">
+                <div className="drawer-header">
                 <button type="button" className="sidebar-toggle" onClick={this.close} aria-label="Close sidebar">✕</button>
-                <span className="sidebar-title">{this.props.header}</span>
+                <div className="sidebar-title">
+                  <Select
+                    id="drawer-operation-select"
+                    value={this.props.operation || this.props.header}
+                    onChange={(val) => this.props.onOperationChange?.(val)}
+                    aria-label="Select operation"
+                    bordered={false}
+                    size="large"
+                    dropdownMatchSelectWidth={false}
+                    dropdownStyle={{ minWidth: 200 }}
+                    style={{ width: '100%', paddingRight: 36, textAlign: 'center' }}
+                    optionLabelProp="children"
+                  >
+                    <Option value="Addition">Addition</Option>
+                    <Option value="Subtraction">Subtraction</Option>
+                  </Select>
+                </div>
               </div>
               <div className="drawer-body">
                 {this.props.items.map(({ text, color }, idx) => (
                   <Button
                     key={text}
-                    value={text}
-                    block
-                    color={color}
-                    size="lg"
-                    innerRef={idx === 0 ? this.firstButtonRef : undefined}
-                    onClick={(e) => { this.clickHandler(e); this.close(); }}
+                    onClick={() => { this.props.chooseRange(text); this.close(); }}
+                    type="default"
+                    size="large"
+                    style={{
+                      width: '100%',
+                      background: colorMap[color] || '#eee',
+                      color: getTextColor(color),
+                      border: 'none'
+                    }}
+                    ref={idx === 0 ? this.firstButtonRef as any : undefined}
                   >
                     {text}
                   </Button>
